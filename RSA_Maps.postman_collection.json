@@ -1,0 +1,278 @@
+{
+	"info": {
+		"_postman_id": "966b928d-0a95-4533-8631-e852cd2803b1",
+		"name": "RSA_Maps",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33070466"
+	},
+	"item": [
+		{
+			"name": "Chaining_GoogleMaps_Api",
+			"item": [
+				{
+					"name": "Add place",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//To get response body -> \"place_id\" value\r",
+									"bodyData = pm.response.json();\r",
+									"\r",
+									"placeId_value = bodyData.place_id;\r",
+									"\r",
+									"//To check in the console\r",
+									"console.log(\"Place ID: \" + placeId_value);\r",
+									"\r",
+									"//Setting placeID as environment variable to use in other request\r",
+									"pm.environment.set(\"placeID\", placeId_value);\r",
+									"\r",
+									"//data validation\r",
+									"pm.test('Verified newly created user', () => {\r",
+									"    const response = pm.response.json();\r",
+									"\r",
+									"    pm.expect(response.place_id).to.eql(pm.environment.get('placeID'));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status line is OK\", () => {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Validating Header', function () {\r",
+									"    pm.response.to.have.header('Content-Type');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response time is less than 1500ms', function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+									"});\r",
+									"\r",
+									"//Schema validation\r",
+									"const schema = {\r",
+									"  //\"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"status\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"place_id\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"scope\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"reference\": {\r",
+									"      \"type\": \"string\"\r",
+									"    },\r",
+									"    \"id\": {\r",
+									"      \"type\": \"string\"\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"status\",\r",
+									"    \"place_id\",\r",
+									"    \"scope\",\r",
+									"    \"reference\",\r",
+									"    \"id\"\r",
+									"  ]\r",
+									"};\r",
+									"\r",
+									"pm.test(\"Response contains valid JSON data\", () => {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(\"Get place by place ID\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"location\": {\r\n    \"lat\": -38.383494,\r\n    \"lng\": 33.427362\r\n  },\r\n  \"accuracy\": 50,\r\n  \"name\": \"Kam Ram\",\r\n  \"phone_number\": \"(+91) 983 893 3937\",\r\n  \"address\": \"29, side layout, cohen 09\",\r\n  \"types\": [\r\n    \"shoe park\",\r\n    \"shop\"\r\n  ],\r\n  \"website\": \"http://google.com\",\r\n  \"language\": \"French-IN\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://rahulshettyacademy.com/maps/api/place/add/json?key=qaclick123",
+							"protocol": "https",
+							"host": [
+								"rahulshettyacademy",
+								"com"
+							],
+							"path": [
+								"maps",
+								"api",
+								"place",
+								"add",
+								"json"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "qaclick123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get place by place ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setNextRequest(\"Update place by place ID\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://rahulshettyacademy.com/maps/api/place/get/json?place_id={{placeID}}&key=qaclick123",
+							"protocol": "https",
+							"host": [
+								"rahulshettyacademy",
+								"com"
+							],
+							"path": [
+								"maps",
+								"api",
+								"place",
+								"get",
+								"json"
+							],
+							"query": [
+								{
+									"key": "place_id",
+									"value": "{{placeID}}"
+								},
+								{
+									"key": "key",
+									"value": "qaclick123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update place by place ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setNextRequest(\"Delete place\")"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"place_id\":\"{{placeID}}\",\r\n\"address\":\"70 winter walk, USA\",\r\n\"key\":\"qaclick123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://rahulshettyacademy.com/maps/api/place/update/json?key =qaclick123&place_id={{placeID}}",
+							"protocol": "https",
+							"host": [
+								"rahulshettyacademy",
+								"com"
+							],
+							"path": [
+								"maps",
+								"api",
+								"place",
+								"update",
+								"json"
+							],
+							"query": [
+								{
+									"key": "key ",
+									"value": "qaclick123"
+								},
+								{
+									"key": "place_id",
+									"value": "{{placeID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete place",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"postman.setNextRequest(null)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"place_id\":\"{{placeID}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://rahulshettyacademy.com/maps/api/place/delete/json?key=qaclick123",
+							"protocol": "https",
+							"host": [
+								"rahulshettyacademy",
+								"com"
+							],
+							"path": [
+								"maps",
+								"api",
+								"place",
+								"delete",
+								"json"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "qaclick123"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
